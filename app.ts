@@ -10,7 +10,7 @@ export const createApp = (): Express => {
 
   app.use(
     cors({
-      origin: "https://school-project-front-end-ruddy.vercel.app", // 👈 URL ของ frontend ที่ deploy แล้ว
+      origin: "*", // 👈 URL ของ frontend ที่ deploy แล้ว
       credentials: true, // เพื่อส่ง cookie / auth
     })
   );

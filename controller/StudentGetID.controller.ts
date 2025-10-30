@@ -1,10 +1,8 @@
-// ✅ ตัวอย่าง Controller เวอร์ชันส่ง id ผ่าน body
 import { Request, Response } from "express";
 import { Student } from "../services/Student.service";
 
 export async function StudentGetIDController(req: Request, res: Response) {
   try {
-    // รับ id จาก body
     const { id } = req.body;
 
     if (!id) {
