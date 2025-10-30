@@ -2,7 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var http = require("http");
 var socket_io_1 = require("socket.io");
-var server = http.createServer();
+// Create an HTTP server that responds on '/' so Render can detect an open HTTP port
+var server = http.createServer(function (req, res) {
+  res.statusCode = 200;
+  res.setHeader("Content-Type", "text/plain; charset=utf-8");
+  res.end("OK\n");
+});
 var io = new socket_io_1.Server(server, {
     cors: {
         origin: `${process.env.CLIENT_ORIGIN}`,

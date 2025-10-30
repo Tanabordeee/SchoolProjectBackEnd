@@ -28,6 +28,10 @@ export function registerSocketEvents(io: Server) {
     
     socket.on("update_location", ({ lat, lng }: LocationEvent) => {
       const info = userInfos[socket.id]
+      if (!info) {
+        // Ignore location updates until the client has joined with user info
+        return;
+      }
 
       const location = { lat, lng };
       userLocations[socket.id] = location;
