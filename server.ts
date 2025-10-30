@@ -15,9 +15,8 @@ const io = new Server(server, {
 });
 
 registerSocketEvents(io);
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 8080;
 
-const PORT = parseInt(process.env.PORT || "3000", 10);
-
-server.listen(PORT, "0.0.0.0", () => {
-  console.log(`Server running at http://0.0.0.0:${PORT}`);
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
 });
