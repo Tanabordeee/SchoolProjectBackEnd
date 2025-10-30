@@ -8,9 +8,22 @@ var server = http.createServer(function (req, res) {
   res.setHeader("Content-Type", "text/plain; charset=utf-8");
   res.end("OK\n");
 });
+var allowedOrigins = [
+    "https://school-project-front-i5ajugf66-tanabordees-projects.vercel.app",
+    "https://school-project-front-2fk7hvhro-tanabordees-projects.vercel.app",
+    "https://school-project-front-end-ruddy.vercel.app",
+    "https://school-project-front-end-zh5m.vercel.app"
+];
 var io = new socket_io_1.Server(server, {
     cors: {
-        origin: `${process.env.CLIENT_ORIGIN}`,
+        origin: function (origin, callback) {
+            if (!origin)
+                return callback(null, true);
+            var normalized = origin.replace(/\/$/, "");
+            if (allowedOrigins.includes(normalized))
+                return callback(null, true);
+            return callback(new Error("Socket.IO CORS blocked: ".concat(origin)));
+        },
         credentials: true
     }
 });
