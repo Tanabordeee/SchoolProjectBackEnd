@@ -1,4 +1,4 @@
-import express, { Express } from "express";
+import express, { Express ,  Request, Response } from "express";
 import router from "./route/route";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -12,6 +12,9 @@ export const createApp = (): Express => {
     })
   );
   app.use(express.json());
+    app.get("/", (req: Request, res: Response) => {
+    res.send("Server is running");
+  });
   app.use("/api", router);
   return app;
 };
