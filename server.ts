@@ -9,8 +9,12 @@ const app = createApp();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "*", 
+    origin: [
+      "https://stfxno1.vercel.app",
+      "https://f4bff1c76c84.ngrok-free.app"
+    ],
     methods: ["GET", "POST"],
+    credentials: true,
   },
 });
 registerSocketEvents(io);

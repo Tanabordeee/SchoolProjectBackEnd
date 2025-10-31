@@ -5,12 +5,16 @@ import cors from "cors";
 export const createApp = (): Express => {
   const app = express();
   app.use(cookieParser());
-    app.use(
-    cors({
-      origin: ["http://localhost:5173" , "https://school-project-front-end-ruddy.vercel.app"], // frontend ของคุณ
-      credentials: true, // อนุญาตส่ง cookie/token ไปด้วยถ้ามี
-    })
-  );
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://stfxno1.vercel.app",
+      "https://f4bff1c76c84.ngrok-free.app"
+    ],
+    credentials: true,
+  })
+);
   app.use(express.json());
     app.get("/", (req: Request, res: Response) => {
     res.send("Server is running");
