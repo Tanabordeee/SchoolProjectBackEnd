@@ -7,7 +7,7 @@ export async function LoginController(req: Request, res: Response) {
   res.cookie("token", result.token, {
     httpOnly: true,
     secure: true,
-    sameSite: "strict",
+    sameSite: "none",
     maxAge: 24 * 60 * 60 * 1000,
   });
   res.json({
