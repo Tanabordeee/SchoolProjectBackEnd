@@ -11,7 +11,8 @@ const io = new Server(server, {
   cors: {
     origin: [
       "https://stfxno1.vercel.app",
-      "https://f4bff1c76c84.ngrok-free.app"
+      "https://f4bff1c76c84.ngrok-free.app",
+      "http://localhost:5173"
     ],
     methods: ["GET", "POST"],
     credentials: true,

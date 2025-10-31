@@ -18,8 +18,9 @@ export async function ChangePassword(req: Request, res: Response){
         switch(method){
             case "PATCH": {
                 const { password } = req.body; 
-                 const token = req.cookies.token; 
-                if (!token) return res.status(401).json({ success: false, message: "Not authenticated" });
+                const authHeader = req.headers.authorization;
+                if (!authHeader) return res.status(401).json({ success: false, message: "Not authenticated" });
+                const token = authHeader.split(" ")[1];
                 const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
                 let data;
                 if(decoded.role === "parent"){

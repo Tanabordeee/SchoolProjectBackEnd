@@ -6,18 +6,24 @@ export async function RegisterParentAndStudent(
   parent: Parent,
   students: Student[]
 ) {
-  // import nanoid แบบ dynamic
   const { nanoid } = await import("nanoid");
 
   // สร้าง password ให้ parent
-  parent.password = await bcrypt.hash(nanoid(10), 10);
+  const parentPlainPassword = nanoid(10);
+  const parentHashedPassword = await bcrypt.hash(parentPlainPassword, 10);
+  parent.password = parentHashedPassword;
 
   // สร้าง password ให้ students
   const studentsWithPasswords = await Promise.all(
-    students.map(async (s) => ({
-      ...s,
-      password: await bcrypt.hash(nanoid(10), 10),
-    }))
+    students.map(async (s) => {
+      const plainPassword = nanoid(10);
+      const hashedPassword = await bcrypt.hash(plainPassword, 10);
+      return {
+        ...s,
+        password: hashedPassword,
+        _plainPassword: plainPassword, // เก็บชั่วคราว
+      };
+    })
   );
 
   // insert parent
@@ -36,7 +42,9 @@ export async function RegisterParentAndStudent(
   // insert students
   const { data: studentData, error: studentError } = await supabase
     .from("students")
-    .insert(studentsWithPasswords)
+    .insert(
+      studentsWithPasswords.map(({ _plainPassword, ...rest }) => rest)
+    )
     .select();
 
   if (studentError || !studentData?.length) {
@@ -59,5 +67,12 @@ export async function RegisterParentAndStudent(
     return;
   }
 
-  return { parent: parentData[0], students: studentData };
+  // return ให้ตรงกับ frontend ใช้ password เป็น plainPassword
+  return {
+    parent: { ...parentData[0], password: parentPlainPassword },
+    students: studentsWithPasswords.map((s, i) => ({
+      ...studentData[i],
+      password: s._plainPassword,
+    })),
+  };
 }
