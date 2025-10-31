@@ -28,6 +28,10 @@ export function registerSocketEvents(io: Server) {
     
     socket.on("update_location", ({ lat, lng }: LocationEvent) => {
       const info = userInfos[socket.id]
+      if (!info) {
+        console.warn(`update_location ignored for ${socket.id}: user not joined`);
+        return;
+      }
 
       const location = { lat, lng };
       userLocations[socket.id] = location;
@@ -42,7 +46,7 @@ export function registerSocketEvents(io: Server) {
 
       socket.emit("location_status", { inside: insideZone, distance });
       if(info.role === "parent" || info.role === "teacher"){
-        console.log(info.nickname)
+          console.log("Emit user_location to all_users:", info.id, info.role, info.studentIds);
           io.to("all_users").emit("user_location", { id: info.id, role: info.role, lat, lng , insideZone , distance , students:info.studentIds});
       }
       if(info.role === "parent" || info.role === "student"){
